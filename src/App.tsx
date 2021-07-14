@@ -3,7 +3,7 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 import LoginForm from "./Components/LoginForm";
 import Nav from "./Components/Navigation";
-import Register from "./Components/Register";
+import RegisterForm from "./Components/RegisterForm";
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <Nav />
         <Switch>
           <Route path="/" exact component={LoginForm} />
-          <Route path="/Register" component={Register} />
+          <Route path="/Register" component={RegisterForm} />
         </Switch>
       </Router>
     </div>

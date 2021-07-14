@@ -76,7 +76,7 @@ const LoginForm: React.FC<any> = (props) => {
             <FormikForm noValidate>
               <Grid
                 container
-                spacing={0}
+                spacing={1}
                 direction="column"
                 alignItems="center"
                 justify="center"
