@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 import LoginForm from "./Components/LoginForm";
 import Nav from "./Components/Navigation";
+import PublicPage from "./Components/PublicPage";
 import RegisterForm from "./Components/RegisterForm";
 
 function App() {
@@ -11,7 +12,8 @@ function App() {
       <Router>
         <Nav />
         <Switch>
-          <Route path="/" exact component={LoginForm} />
+          <Route path="/" exact component={PublicPage} />
+          <Route path="/login" exact component={LoginForm} />
           <Route path="/Register" component={RegisterForm} />
         </Switch>
       </Router>

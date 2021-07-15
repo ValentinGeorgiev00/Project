@@ -1,6 +1,8 @@
+import axios from "axios";
 import { Formik, Form as FormikForm, useField } from "formik";
 import PropTypes from "prop-types";
 import React from "react";
+import { toast } from "react-toastify";
 import * as yup from "yup";
 
 import { Grid } from "@material-ui/core";
@@ -10,6 +12,12 @@ import TextField from "@material-ui/core/TextField";
 const LoginForm: React.FC<any> = (props) => {
   const handleAdd = (submitData: any, { resetForm }: any) => {
     console.log(submitData);
+    axios
+      .post("http://localhost:8081/login", submitData)
+
+      .catch((error) => {
+        toast.error(error);
+      });
   };
 
   const initialValues = {
@@ -22,10 +30,7 @@ const LoginForm: React.FC<any> = (props) => {
     password: yup
       .string()
       .required("Please enter your password")
-      .matches(
-        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-        "Password must contain at least 8 characters, one uppercase, one number and one special case character"
-      ),
+      .min(6, "Password is too short - should be 8 chars minimum."),
   });
 
   const TitleTextField = () => {
@@ -79,7 +84,7 @@ const LoginForm: React.FC<any> = (props) => {
                 spacing={1}
                 direction="column"
                 alignItems="center"
-                justify="center"
+                justifyContent="center"
                 style={{ minHeight: "50vh" }}
               >
                 <Grid item xs={12}>

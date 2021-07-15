@@ -1,7 +1,9 @@
+import axios from "axios";
 import { Formik, Form as FormikForm, useField } from "formik";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
-import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import * as yup from "yup";
 
 import { Grid } from "@material-ui/core";
@@ -13,28 +15,32 @@ import ShowPassword from "./ShowPassword";
 const RegisterForm: React.FC<any> = (props) => {
   const history = useHistory();
   const handleAdd = (submitData: any, { resetForm }: any) => {
-    delete submitData.confirmPass;
+    // delete submitData.confirmPass;
+    axios.post("http://localhost:8081/register", submitData).catch((error) => {
+      console.log(error);
+      toast.error(error);
+    });
     console.log(submitData);
     history.push("");
   };
 
   const initialValues = {
-    name: "",
     email: "",
+    name: "",
+    surname: "",
     password: "",
+    confirmPassword: "",
   };
 
   const validationSchema = yup.object().shape({
+    surname: yup.string().required("required").typeError("required"),
     name: yup.string().required("required").typeError("required"),
     email: yup.string().required("required").typeError("required"),
     password: yup
       .string()
       .required("Please enter your password")
-      .matches(
-        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-        "Password must contain at least 8 characters, one uppercase, one number and one special case character"
-      ),
-    confirmPass: yup
+      .min(6, "Password is too short - should be 6 chars minimum."),
+    confirmPassword: yup
       .string()
       .required("Please confirm your password")
       .when("password", {
@@ -65,11 +71,11 @@ const RegisterForm: React.FC<any> = (props) => {
 
   const ConfirmPassTextField = () => {
     const [fieldTitle, { error: errorTitle, touched: touchedTitle }] =
-      useField("confirmPass");
+      useField("confirmPassword");
     const hasErrorTitle = Boolean(errorTitle) && touchedTitle;
     return (
       <TextField
-        label="confirmPass"
+        label="confirmPassword"
         type="text"
         variant={"outlined"}
         error={hasErrorTitle}
@@ -87,6 +93,23 @@ const RegisterForm: React.FC<any> = (props) => {
     return (
       <TextField
         label="name"
+        type="text"
+        variant={"outlined"}
+        error={hasErrorTitle}
+        helperText={hasErrorTitle && errorTitle}
+        fullWidth
+        {...fieldTitle}
+      />
+    );
+  };
+
+  const SurNameTextField = () => {
+    const [fieldTitle, { error: errorTitle, touched: touchedTitle }] =
+      useField("surname");
+    const hasErrorTitle = Boolean(errorTitle) && touchedTitle;
+    return (
+      <TextField
+        label="surname"
         type="text"
         variant={"outlined"}
         error={hasErrorTitle}
@@ -136,14 +159,17 @@ const RegisterForm: React.FC<any> = (props) => {
                 spacing={0}
                 direction="column"
                 alignItems="center"
-                justify="center"
+                justifyContent="center"
               >
                 <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <EmailTextField />
+                  </Grid>
                   <Grid item xs={12}>
                     <NameTextField />
                   </Grid>
                   <Grid item xs={12}>
-                    <EmailTextField />
+                    <SurNameTextField />
                   </Grid>
                   <Grid item xs={12}>
                     <PassTextField />

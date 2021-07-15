@@ -10,6 +10,9 @@ function Nav() {
     <nav className={classes.nav}>
       <ul className={classes.navLinks}>
         <Link className={classes.Navstyle} to="/">
+          <li>Home</li>
+        </Link>
+        <Link className={classes.Navstyle} to="/Login">
           <li>Login</li>
         </Link>
         <Link className={classes.Navstyle} to="/register">
