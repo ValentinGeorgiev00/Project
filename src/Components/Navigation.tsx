@@ -1,26 +1,58 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import useStyles from "./Style";
 
-function Nav() {
+const Nav: React.FC<any> = (props) => {
+  const { userType } = props;
   const classes = useStyles();
+  const { pathname } = useLocation();
 
   return (
     <nav className={classes.nav}>
       <ul className={classes.navLinks}>
-        <Link className={classes.Navstyle} to="/">
-          <li>Home</li>
-        </Link>
-        <Link className={classes.Navstyle} to="/Login">
-          <li>Login</li>
-        </Link>
-        <Link className={classes.Navstyle} to="/register">
-          <li>Register</li>
-        </Link>
+        {pathname.includes("public") ? (
+          <>
+            <Link className={classes.Navstyle} to="/public/home">
+              <li>Home</li>
+            </Link>
+            <Link className={classes.Navstyle} to="/public/login">
+              <li>login</li>
+            </Link>
+            <Link className={classes.Navstyle} to="/public/register">
+              <li>Register</li>
+            </Link>
+          </>
+        ) : userType === "ROLE_USER" ? (
+          <>
+            <Link className={classes.Navstyle} to="/portal/home">
+              <li>Home</li>
+            </Link>
+            <Link className={classes.Navstyle} to="/portal/cart">
+              <li>Cart</li>
+            </Link>
+            <Link className={classes.Navstyle} to="/portal/my-profile">
+              <li>My Profile</li>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link className={classes.Navstyle} to="/portal/home">
+              <li>Home</li>
+            </Link>
+            <Link className={classes.Navstyle} to="/portal/cart">
+              <li>Cart</li>
+            </Link>
+            <Link className={classes.Navstyle} to="/portal/admin-panel">
+              <li>Admin Panel</li>
+            </Link>
+            <Link className={classes.Navstyle} to="/portal/my-profile">
+              <li>My Profile</li>
+            </Link>
+          </>
+        )}
       </ul>
     </nav>
   );
-}
+};
 
 export default Nav;

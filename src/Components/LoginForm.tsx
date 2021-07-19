@@ -2,6 +2,7 @@ import axios from "axios";
 import { Formik, Form as FormikForm, useField } from "formik";
 import PropTypes from "prop-types";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 
@@ -10,11 +11,20 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
 const LoginForm: React.FC<any> = (props) => {
+  const { setuserType } = props;
+  const history = useHistory();
+
   const handleAdd = (submitData: any, { resetForm }: any) => {
-    console.log(submitData);
     axios
       .post("http://localhost:8081/login", submitData)
-
+      .then((response: any) => {
+        if (response.data.roles[0]) {
+          setuserType(response.data.roles[0]);
+          history.replace({
+            pathname: "/portal/home",
+          });
+        }
+      })
       .catch((error) => {
         toast.error(error);
       });
@@ -96,6 +106,13 @@ const LoginForm: React.FC<any> = (props) => {
                 <Grid item xs={12}>
                   <Button type={"submit"} variant={"outlined"} color="primary">
                     Login
+                  </Button>
+                  <Button
+                    onClick={() => setuserType("")}
+                    variant={"outlined"}
+                    color="primary"
+                  >
+                    Logout
                   </Button>
                 </Grid>
               </Grid>

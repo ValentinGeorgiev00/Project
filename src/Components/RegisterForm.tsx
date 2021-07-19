@@ -21,7 +21,7 @@ const RegisterForm: React.FC<any> = (props) => {
       toast.error(error);
     });
     console.log(submitData);
-    history.push("");
+    history.push("/Login");
   };
 
   const initialValues = {
@@ -30,6 +30,7 @@ const RegisterForm: React.FC<any> = (props) => {
     surname: "",
     password: "",
     confirmPassword: "",
+    adress: "",
   };
 
   const validationSchema = yup.object().shape({
@@ -50,6 +51,7 @@ const RegisterForm: React.FC<any> = (props) => {
           .string()
           .oneOf([yup.ref("password")], "Password doesn't match"),
       }),
+    adress: yup.string().notRequired().typeError(""),
   });
 
   const EmailTextField = () => {
@@ -93,6 +95,23 @@ const RegisterForm: React.FC<any> = (props) => {
     return (
       <TextField
         label="name"
+        type="text"
+        variant={"outlined"}
+        error={hasErrorTitle}
+        helperText={hasErrorTitle && errorTitle}
+        fullWidth
+        {...fieldTitle}
+      />
+    );
+  };
+
+  const AdressTextField = () => {
+    const [fieldTitle, { error: errorTitle, touched: touchedTitle }] =
+      useField("adress");
+    const hasErrorTitle = Boolean(errorTitle) && touchedTitle;
+    return (
+      <TextField
+        label="adress"
         type="text"
         variant={"outlined"}
         error={hasErrorTitle}
@@ -176,6 +195,9 @@ const RegisterForm: React.FC<any> = (props) => {
                   </Grid>
                   <Grid item xs={12}>
                     <ConfirmPassTextField />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <AdressTextField />
                   </Grid>
                   <Grid item xs={12}>
                     <Button
